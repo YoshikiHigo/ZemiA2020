@@ -32,6 +32,10 @@ public class ZemiAMain {
       return;
     }
 
+    if(true){
+      System.out.println("ABC");
+    }
+
     final ZemiAVisitor visitor = new ZemiAVisitor();
     unit.accept(visitor);
   }
