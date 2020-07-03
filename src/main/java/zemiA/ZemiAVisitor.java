@@ -15,10 +15,18 @@ public class ZemiAVisitor extends ASTVisitor {
     return super.visit(node);
   }
 
+  public ZemiAVisitor() {
+    super();
+  }
+
   @Override
   public boolean visit(MethodDeclaration node) {
-    //System.out.println(node.toString());
+    System.out.println(node.toString());
     return super.visit(node);
+  }
+
+  public ZemiAVisitor(boolean visitDocTags) {
+    super(visitDocTags);
   }
 
   @Override

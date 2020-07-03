@@ -21,6 +21,8 @@ public class ZemiAMain {
       return;
     }
 
+    //hogehoge
+
     final ASTParser parser = ASTParser.newParser(AST.JLS14);
     parser.setSource(String.join(System.lineSeparator(), lines).toCharArray());
 
