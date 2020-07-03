@@ -1,4 +1,6 @@
 package FileLoader;
+import org.eclipse.osgi.container.SystemModule;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -6,8 +8,7 @@ import java.util.*;
 import java.io.File;
 
 public class FileLoader {
-
-    // シングルトン化
+    // Make Singleton
     private static FileLoader instance;
 
     private FileLoader(){
@@ -15,7 +16,7 @@ public class FileLoader {
         contentsCache = new HashMap<String, List<String>>();
     }
 
-    public static FileLoader getInstance(){
+    public static FileLoader GetInstance(){
         if(instance == null){
             instance = new FileLoader();
         }
@@ -27,9 +28,9 @@ public class FileLoader {
     HashMap<String, String> classPathTable;
     HashMap<String, List<String>> contentsCache;
 
-    // 調査対象のプロジェクトのパスの設定
-    // もしも与えられたものがフォルダのパスでなかったらFalseを返す
-    // 正しくパスが与えられていればTrueを返す
+    // Set Path of Target Project
+    // If arg is illegal, return False.
+    // If not, return True.
     public Boolean Init(String _projectPath){
         projectPath = _projectPath;
 
@@ -37,16 +38,16 @@ public class FileLoader {
         return projectDir.isDirectory();
     }
 
-    // 設定したプロジェクト以下の全ての*.javaファイルを検索し、
-    // クラス名のリストを返す
+    // Search all .java Files in the Project
+    // and Return all Class Names
     public List<String> GetAllClassNames(){
-        String pattern = "*.java";
+        String pattern = ".*\\.java";
         List<String> retVal = new ArrayList<String>();
         Queue<File> dirs = new ArrayDeque<File>();
         File root = new File(projectPath);
         dirs.add(root);
 
-        //再帰的に検索
+        //Search Recursive
         while(!dirs.isEmpty()){
             File dir = dirs.poll();
             File[] children = dir.listFiles();
@@ -54,8 +55,8 @@ public class FileLoader {
                 if(f.isDirectory()){
                     dirs.add(f);
                 }else if(f.getName().matches((pattern))){
-                    // .でファイル名を区切った手前の文字列をクラス名とする
-                    String className = f.getName().split(".")[0];
+                    System.out.println(f.getName());
+                    String className = f.getName().split("\\.")[0];
                     retVal.add(className);
                     classPathTable.put(className, f.getAbsolutePath());
                 }
@@ -64,8 +65,8 @@ public class FileLoader {
         return retVal;
     }
 
-    // クラス名を与えられると、ファイルの内容を返す。一度調べた内容はキャッシュする。
-    // 存在しないクラス名が与えられた場合はnullを返す。
+    // Return File Content
+    // If classname is illegal, return null
     public List<String> GetJavaFile(String className){
         String path = classPathTable.get(className);
         List<String> content = null;
@@ -83,4 +84,20 @@ public class FileLoader {
 
         return content;
     }
+
+    //For test
+    /*
+    public static void main(final String[] args) {
+        FileLoader f = FileLoader.GetInstance();
+        f.Init("C:\\Users\\daich\\Documents\\SemiAJava\\ZemiA2020\\src\\main\\java");
+        List<String> classes = f.GetAllClassNames();
+        System.out.println(classes);
+
+        List<String> zemiAContent = f.GetJavaFile("ZemiAMain");
+        System.out.println(zemiAContent);
+        // Cache Test
+        System.out.println(f.GetJavaFile("ZemiAMain"));
+    }
+    */
+
 }
