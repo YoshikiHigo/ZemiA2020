@@ -12,6 +12,7 @@ public class FileLoader {
 
     private FileLoader(){
         classPathTable = new HashMap<String, String>();
+        contentsCache = new HashMap<String, List<String>>();
     }
 
     public static FileLoader getInstance(){
@@ -24,6 +25,7 @@ public class FileLoader {
 
     String projectPath;
     HashMap<String, String> classPathTable;
+    HashMap<String, List<String>> contentsCache;
 
     // 調査対象のプロジェクトのパスの設定
     // もしも与えられたものがフォルダのパスでなかったらFalseを返す
@@ -62,5 +64,23 @@ public class FileLoader {
         return retVal;
     }
 
+    // クラス名を与えられると、ファイルの内容を返す。一度調べた内容はキャッシュする。
+    // 存在しないクラス名が与えられた場合はnullを返す。
+    public List<String> GetJavaFile(String className){
+        String path = classPathTable.get(className);
+        List<String> content = null;
 
+        if(!contentsCache.containsKey(className)) {
+            try {
+                content = Files.readAllLines(Paths.get(path), StandardCharsets.ISO_8859_1);
+            } catch (final Exception e) {
+                return null;
+            }
+            contentsCache.put(className, content);
+        }else{
+            content = contentsCache.get(className);
+        }
+
+        return content;
+    }
 }
