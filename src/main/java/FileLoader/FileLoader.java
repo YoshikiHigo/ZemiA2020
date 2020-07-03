@@ -2,18 +2,17 @@ package FileLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayDeque;
+import java.util.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
 
 public class FileLoader {
 
     // シングルトン化
     private static FileLoader instance;
 
-    private FileLoader(){}
+    private FileLoader(){
+        classPathTable = new HashMap<String, String>();
+    }
 
     public static FileLoader getInstance(){
         if(instance == null){
@@ -24,6 +23,8 @@ public class FileLoader {
     }
 
     String projectPath;
+    HashMap<String, String> classPathTable;
+
     // 調査対象のプロジェクトのパスの設定
     // もしも与えられたものがフォルダのパスでなかったらFalseを返す
     // 正しくパスが与えられていればTrueを返す
@@ -51,11 +52,15 @@ public class FileLoader {
                 if(f.isDirectory()){
                     dirs.add(f);
                 }else if(f.getName().matches((pattern))){
-                    // .でファイル名を区切って手前の文字列だけを返す
-                    retVal.add(f.getName().split(".")[0]);
+                    // .でファイル名を区切った手前の文字列をクラス名とする
+                    String className = f.getName().split(".")[0];
+                    retVal.add(className);
+                    classPathTable.put(className, f.getAbsolutePath());
                 }
             }
         }
         return retVal;
     }
+
+
 }
