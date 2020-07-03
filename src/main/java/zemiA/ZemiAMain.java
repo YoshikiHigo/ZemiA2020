@@ -14,7 +14,7 @@ public class ZemiAMain {
   public static void main(final String[] args) {
     List<String> lines = null;
     try {
-      lines = Files.readAllLines(Paths.get("src/main/java/zemiA/ZemiAMain.java"),
+      lines = Files.readAllLines(Paths.get("src/main/java/zemiA/sample.java"),
           StandardCharsets.ISO_8859_1);
     } catch (final Exception e) {
       System.err.println(e.getMessage());
