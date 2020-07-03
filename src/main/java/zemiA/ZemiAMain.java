@@ -32,8 +32,11 @@ public class ZemiAMain {
       return;
     }
 
+    // comment
     if(true){
       System.out.println("ABC");
+    }else {
+      System.out.println("DEF");
     }
 
     final ZemiAVisitor visitor = new ZemiAVisitor();
