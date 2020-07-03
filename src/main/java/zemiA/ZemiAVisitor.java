@@ -26,11 +26,4 @@ public class ZemiAVisitor extends ASTVisitor {
     System.out.println(node.toString());
     return super.visit(node);
   }
-
-   @Override
-  public boolean visit(final IfStatement node){
-    System.out.println(node.toString());
-    System.out.println(node.getElseStatement().toString());
-    return super.visit(node);
-   }
 }
