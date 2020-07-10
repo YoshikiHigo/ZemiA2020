@@ -3,6 +3,12 @@ package zemiA;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
 
 public class ZemiAVisitor extends ASTVisitor {
   public ArrayList<Integer> CYCLO = new ArrayList<Integer>();

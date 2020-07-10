@@ -16,6 +16,8 @@ public class ZemiAMain {
     try {
       lines = Files.readAllLines(Paths.get("src/main/java/zemiA/sample.java"),
           StandardCharsets.ISO_8859_1);
+      lines = Files.readAllLines(Paths.get("src/main/java/zemiA/ZemiAMain.java"),
+              StandardCharsets.ISO_8859_1);
     } catch (final Exception e) {
       System.err.println(e.getMessage());
       return;
@@ -30,6 +32,10 @@ public class ZemiAMain {
     } catch (final Exception e) {
       System.err.println(e.getMessage());
       return;
+    }
+
+    if(true){
+      System.out.println("ABC");
     }
 
     final ZemiAVisitor visitor = new ZemiAVisitor();
