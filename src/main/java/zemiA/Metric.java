@@ -7,16 +7,21 @@ public class Metric {
         this.visitor = visitor;
     }
 
-    public int getNOM(){
+    public int NOM(){
         return visitor.getMethod_Count();
     }
 
 
-    public int getWMC(){
-        return visitor.getIf_Count() + (visitor.getCase_Count()-visitor.getSwitch_Count()) + visitor.getMethod_Count();
+    public int WMC(){
+        int WMC=0;
+
+        for(int num : visitor.CYCLO){
+            WMC = WMC + num;
+        }
+        return WMC;
     }
 
-    public int getAMW(){
-        return getWMC()/visitor.getMethod_Count();
+    public int AMW(){
+        return WMC()/NOM();
     }
 }

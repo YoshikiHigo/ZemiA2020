@@ -2,7 +2,10 @@ package zemiA;
 
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.ArrayList;
+
 public class ZemiAVisitor extends ASTVisitor {
+  public ArrayList<Integer> CYCLO = new ArrayList<Integer>();
   private int Method_count;
   private int If_count;
   private int Case_count;
@@ -16,10 +19,25 @@ public class ZemiAVisitor extends ASTVisitor {
   }
 
   @Override
+  public void endVisit(MethodDeclaration node) {
+    CYCLO.add(If_count + (Case_count-Switch_count) + 1);
+    If_count=0;
+    Case_count=0;
+    Switch_count=0;
+    super.endVisit(node);
+  }
+
+  @Override
   public boolean visit(IfStatement node) {
     If_count++;
     System.out.println("If:" + If_count);
-    System.out.println(node.toString());
+    return super.visit(node);
+  }
+
+  @Override
+  public boolean visit(SwitchStatement node) {
+    Switch_count++;
+    System.out.println("Switch:" + Switch_count);
     return super.visit(node);
   }
 
@@ -30,26 +48,7 @@ public class ZemiAVisitor extends ASTVisitor {
     return super.visit(node);
   }
 
-  @Override
-  public void endVisit(SwitchStatement node) {
-    Switch_count++;
-    System.out.println("Case:" + Switch_count);
-    super.endVisit(node);
-  }
-
   public int getMethod_Count(){
     return Method_count;
-  }
-
-  public int getIf_Count(){
-    return If_count;
-  }
-
-  public int getSwitch_Count(){
-    return Switch_count;
-  }
-
-  public int getCase_Count(){
-    return Case_count;
   }
 }
