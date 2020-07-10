@@ -1,9 +1,9 @@
 package zemiA;
 
 public class Metric {
-    private ZemiAVisitor visitor;
+    private MetricVisitor visitor;
 
-    public Metric(ZemiAVisitor visitor){
+    public Metric(MetricVisitor visitor){
         this.visitor = visitor;
     }
 
