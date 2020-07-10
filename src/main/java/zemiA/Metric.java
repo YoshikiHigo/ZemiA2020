@@ -7,12 +7,12 @@ public class Metric {
         this.visitor = visitor;
     }
 
-    public int NOM(){
+    public int getNOM(){
         return visitor.getMethod_Count();
     }
 
 
-    public int WMC(){
+    public int getWMC(){
         int WMC=0;
 
         for(int num : visitor.CYCLO){
@@ -21,7 +21,7 @@ public class Metric {
         return WMC;
     }
 
-    public int AMW(){
-        return WMC()/NOM();
+    public int getAMW(){
+        return getWMC()/getNOM();
     }
 }
