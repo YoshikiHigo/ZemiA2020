@@ -13,6 +13,7 @@ public class ZemiAVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
+<<<<<<< HEAD
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		//System.out.println(node.toString());
@@ -24,5 +25,26 @@ public class ZemiAVisitor extends ASTVisitor {
 		//System.out.println(node.toString());
 		return super.visit(node);
 	}
+=======
+  public ZemiAVisitor() {
+    super();
+  }
+
+  @Override
+  public boolean visit(MethodDeclaration node) {
+    System.out.println(node.toString());
+    return super.visit(node);
+  }
+
+  public ZemiAVisitor(boolean visitDocTags) {
+    super(visitDocTags);
+  }
+
+  @Override
+  public boolean visit(final MethodInvocation node) {
+    System.out.println(node.toString());
+    return super.visit(node);
+  }
+>>>>>>> 80589c55598fab838caee59d613f3558a247e875
 }
 
