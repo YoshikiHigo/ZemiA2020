@@ -20,27 +20,19 @@ class Metrics{
 	int NOM;
 }
 
-class Metrics{
-	int NProtM;
-	//NProtM = getNProtM();
-	double BUR;
-	double BOvR;
-	double AMW;
-	int WMC;
-	int NOM;
-}
-
 public class ZemiAMain {
 
 	public static void main(final String[] args) {
-		if (args[1] == null){
-			System.out.println("please write folder path");
-			System.exit(0);
-		}
+//		if (args[1] == null){
+//			System.out.println("please write folder path");
+//			System.exit(0);
+//		}
+
+		Metrics metrics = new Metrics();
 
 		FileLoader fileloader = FileLoader.GetInstance();
 
-		if(!fileloader.Init(args[1])){
+		if(!fileloader.Init("src/main/java/zemiA")){
 			System.out.println("please write folder path");
 			System.exit(0);
 		}
@@ -62,10 +54,17 @@ public class ZemiAMain {
 				return;
 			}
 
-			final ZemiAVisitor visitor = new ZemiAVisitor();
-			unit.accept(visitor);
+			final WeightedMethodCount wmc = new WeightedMethodCount();
+			unit.accept(wmc);
 
-			//ここから各機能のクラスを実行
+			final AverageMethodWeight amw = new AverageMethodWeight();
+			unit.accept(amw);
+
+			metrics.WMC = wmc.getWMC();
+			metrics.AMW = amw.getAMW();
+
+			System.out.println(className + " of WMC = " + metrics.WMC);
+			System.out.println(className + " of AMW = " + metrics.AMW);
 		}
 	}
 }
