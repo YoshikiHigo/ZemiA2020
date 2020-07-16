@@ -1,16 +1,15 @@
 package zemiA;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.dom.*;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.Statement;
+import java.util.List;
 
-public class MetricVisitor extends ASTVisitor {
+public class AverageMethodWeight extends ASTVisitor {
     public ArrayList<Integer> CYCLO = new ArrayList<Integer>();
     private int Method_count;
     private int If_count;
@@ -54,7 +53,16 @@ public class MetricVisitor extends ASTVisitor {
         return super.visit(node);
     }
 
-    public int getMethod_Count(){
-        return Method_count;
+    public double getAMW(){
+        int WMC=0;
+        double AMW=0;
+
+        for(int num : CYCLO){
+            WMC = WMC + num;
+        }
+
+        AMW = (double)WMC/Method_count;
+
+        return AMW;
     }
 }
