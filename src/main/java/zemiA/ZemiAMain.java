@@ -39,8 +39,5 @@ public class ZemiAMain {
 
 		final ZemiAVisitor visitor = new ZemiAVisitor();
 		unit.accept(visitor);
-
-		final NumberOfMethod NOM = new NumberOfMethod();
-		unit.accept(NOM);
 	}
 }
