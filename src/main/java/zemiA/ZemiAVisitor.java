@@ -9,7 +9,7 @@ public class ZemiAVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(SimpleName node) {
-		System.out.println(node.getIdentifier());
+		//System.out.println(node.getIdentifier());
 		return super.visit(node);
 	}
 
