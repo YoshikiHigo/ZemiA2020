@@ -32,19 +32,11 @@ public class ZemiAMain {
 			System.err.println(e.getMessage());
 			return;
 		}
+		if (true) {
+			System.out.println("ABC");
+		}
 
 		final ZemiAVisitor visitor = new ZemiAVisitor();
 		unit.accept(visitor);
 	}
-
-	public static void test() {
-		System.out.println("Hello");
-	}
-
-	@Override
-	public String toString() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.toString();
-	}
-
 }
