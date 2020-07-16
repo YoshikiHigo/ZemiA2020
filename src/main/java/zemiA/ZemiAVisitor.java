@@ -1,5 +1,7 @@
 package zemiA;
 
+import org.eclipse.jdt.core.dom.*;
+
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -47,4 +49,3 @@ public class ZemiAVisitor extends ASTVisitor {
   }
 >>>>>>> 80589c55598fab838caee59d613f3558a247e875
 }
-

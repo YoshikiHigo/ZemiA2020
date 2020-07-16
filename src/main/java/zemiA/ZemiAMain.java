@@ -20,6 +20,16 @@ class Metrics{
 	int NOM;
 }
 
+class Metrics{
+	int NProtM;
+	//NProtM = getNProtM();
+	double BUR;
+	double BOvR;
+	double AMW;
+	int WMC;
+	int NOM;
+}
+
 public class ZemiAMain {
 
 	public static void main(final String[] args) {
