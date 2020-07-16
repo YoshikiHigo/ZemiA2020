@@ -21,9 +21,9 @@ public class ZemiAVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
-	@Override
-	public boolean visit(final MethodInvocation node) {
-		//System.out.println(node.toString());
-		return super.visit(node);
-	}
+  @Override
+  public boolean visit(final MethodInvocation node) {
+    System.out.println(node.toString());
+    return super.visit(node);
+  }
 }
