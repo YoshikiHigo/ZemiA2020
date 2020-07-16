@@ -9,8 +9,9 @@ public class BaseClassOverridingRatio extends ASTVisitor {
 
 	@Override
 	public boolean visit(SimpleName node) {
+		// TODO 自動生成されたメソッド・スタブ
 		if (o.equals(node.getIdentifier())) {
-			System.out.println("a");
+			System.out.println("aとbは同じです。");
 		}
 		return super.visit(node);
 	}
