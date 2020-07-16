@@ -1,8 +1,5 @@
 package zemiA;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -12,63 +9,95 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import FileLoader.FileLoader;
+
 public class NumberofProtectedMembers extends ASTVisitor{
-	String superclass;
+	String superc;
+	int NprotM = 0;
 	org.eclipse.jdt.core.dom.Type superClass;
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		superClass = node.getSuperclassType();
-		superclass = superClass.toString();
-		System.out.println(superclass);
+		//System.out.println(node.getSuperclassType());
+		if(superClass!=null) {
+			FileLoader fileloader = FileLoader.GetInstance();
+			List<String> lines;
+			superc = superClass.toString();
+			System.out.println(superc);
+			lines = fileloader.GetJavaFile(superc);
+			System.out.println(lines);
+			final ASTParser parser2 = ASTParser.newParser(AST.JLS14);
+			System.out.println(parser2);
+			if(lines!=null) {
+				parser2.setSource(String.join(System.lineSeparator(), lines).toCharArray());
+
+				CompilationUnit unit = null;
+				try {
+					unit = (CompilationUnit) parser2.createAST(new NullProgressMonitor());
+				} catch (final Exception e) {
+					System.err.println(e.getMessage());
+					System.exit(0);
+				}
+
+				final SearchProtected Protected = new SearchProtected();
+				unit.accept(Protected);
+				NprotM=Protected.getNprotM();
+			}
+		}
+		System.out.println(NprotM);
 		return super.visit(node);
 	}
 
+	public int getNprotM() {
+		return NprotM;
+	}
+
 	public static void main(final String[] args) {
-		List<String> lines = null;
-		try {
-			lines = Files.readAllLines(Paths.get("src/main/java/zemiA/ZemiAMain.java"),
-					StandardCharsets.ISO_8859_1);
-		} catch (final Exception e) {
-			System.err.println(e.getMessage());
-			return;
+//		if (args[1] == null){
+//			System.out.println("please write folder path");
+//			System.exit(0);
+//		}
+
+		Metrics metrics = new Metrics();
+		FileLoader fileloader = FileLoader.GetInstance();
+
+		if(!fileloader.Init("src/main/java/zemiA")){
+			System.out.println("please write folder path");
+			System.exit(0);
 		}
 
-		final ASTParser parser = ASTParser.newParser(AST.JLS14);
-		parser.setSource(String.join(System.lineSeparator(), lines).toCharArray());
+		List<String> classNames = fileloader.GetAllClassNames();
 
-		CompilationUnit unit = null;
-		try {
-			unit = (CompilationUnit) parser.createAST(new NullProgressMonitor());
-		} catch (final Exception e) {
-			System.err.println(e.getMessage());
-			return;
+		for (String className : classNames){
+			List<String> lines = null;
+			lines = fileloader.GetJavaFile(className);
+
+			final ASTParser parser = ASTParser.newParser(AST.JLS14);
+			parser.setSource(String.join(System.lineSeparator(), lines).toCharArray());
+
+			CompilationUnit unit = null;
+			try {
+				unit = (CompilationUnit) parser.createAST(new NullProgressMonitor());
+			} catch (final Exception e) {
+				System.err.println(e.getMessage());
+				return;
+			}
+
+			final WeightedMethodCount wmc = new WeightedMethodCount();
+			unit.accept(wmc);
+
+			final AverageMethodWeight amw = new AverageMethodWeight();
+			unit.accept(amw);
+
+			final NumberofProtectedMembers nprotm = new NumberofProtectedMembers();
+			unit.accept(nprotm);
+
+			metrics.WMC = wmc.getWMC();
+			metrics.AMW = amw.getAMW();
+
+			System.out.println(className + " of WMC = " + metrics.WMC);
+			System.out.println(className + " of AMW = " + metrics.AMW);
 		}
-		if (true) {
-			System.out.println("ABC");
-		}
-
-		final ZemiAVisitor visitor = new ZemiAVisitor();
-		unit.accept(visitor);
-	}
-
-	class Parent0801 {
-	    public String ps1="親クラスのメンバ変数が参照されました。";
-	    public Parent0801(){
-	        System.out.println("親クラスのコンストラクタ（引数なし）が呼ばれました。");
-	    }
-	    public void pm() {
-	        System.out.println("親クラスのメソッドが呼ばれました。");
-	    }
-	}
-
-	class Child0801 extends Parent0801 { // Parentクラス（親クラス）を継承。
-	    public String cs1="子クラスのメンバ変数が参照されました。";
-	    public Child0801(){
-	        System.out.println("自クラスのコンストラクタ（引数なし）が呼ばれました。");
-	    }
-	    public void cm() {
-	        System.out.println("子クラスのメソッドが呼ばれました。");
-	    }
 	}
 
 }
