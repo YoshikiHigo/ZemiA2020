@@ -27,6 +27,7 @@ public class BaseClassOverridingRatio extends ASTVisitor {
 		Type superclass = node.getSuperclassType();
 		if(superclass != null){
 			superclassName = superclass.toString();
+			BOvN = 0;
 		}else{
 			superclassName = "null";
 		}

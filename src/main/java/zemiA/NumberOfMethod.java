@@ -44,7 +44,6 @@ public class NumberOfMethod extends ASTVisitor {
 		}else{
 			return methodTable.get(className);
 		}
-
 	}
 
 	public static int getNOM(String className){
