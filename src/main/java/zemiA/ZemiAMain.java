@@ -1,15 +1,13 @@
 package zemiA;
 
-import FileLoader.FileLoader;
+import java.util.List;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
+import FileLoader.FileLoader;
 
 class Metrics{
 	int NProtM;
@@ -29,7 +27,6 @@ public class ZemiAMain {
 //		}
 
 		Metrics metrics = new Metrics();
-
 		FileLoader fileloader = FileLoader.GetInstance();
 
 		if(!fileloader.Init("src/main/java/zemiA")){
