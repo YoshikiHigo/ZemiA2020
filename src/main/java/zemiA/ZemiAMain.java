@@ -1,12 +1,13 @@
 package zemiA;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import FileLoader.FileLoader;
 
 class Metrics{
@@ -57,11 +58,21 @@ public class ZemiAMain {
 			final AverageMethodWeight amw = new AverageMethodWeight();
 			unit.accept(amw);
 
+			final NumberofProtectedMembers nprotm = new NumberofProtectedMembers();
+			unit.accept(nprotm);
+
+			final NumberOfMethod nom = new NumberOfMethod();
+			unit.accept(nom);
+
 			metrics.WMC = wmc.getWMC();
 			metrics.AMW = amw.getAMW();
+			metrics.NProtM = nprotm.getNprotM();
+			metrics.NOM = nom.getNOM();
 
 			System.out.println(className + " of WMC = " + metrics.WMC);
 			System.out.println(className + " of AMW = " + metrics.AMW);
+			System.out.println(className + " of NProtM = " + metrics.NProtM);
+			System.out.println(className + " of NOM = " + metrics.NOM);
 		}
 	}
 }

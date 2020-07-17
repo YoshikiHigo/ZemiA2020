@@ -19,7 +19,7 @@ public class AverageMethodWeight extends ASTVisitor {
     @Override
     public boolean visit(MethodDeclaration node) {
         Method_count++;
-        System.out.println("Method:" + Method_count);
+//        System.out.println("Method:" + Method_count);
         return super.visit(node);
     }
 
@@ -35,21 +35,21 @@ public class AverageMethodWeight extends ASTVisitor {
     @Override
     public boolean visit(IfStatement node) {
         If_count++;
-        System.out.println("If:" + If_count);
+//        System.out.println("If:" + If_count);
         return super.visit(node);
     }
 
     @Override
     public boolean visit(SwitchStatement node) {
         Switch_count++;
-        System.out.println("Switch:" + Switch_count);
+//        System.out.println("Switch:" + Switch_count);
         return super.visit(node);
     }
 
     @Override
     public boolean visit(SwitchCase node) {
         Case_count++;
-        System.out.println("Case:" + Case_count);
+//        System.out.println("Case:" + Case_count);
         return super.visit(node);
     }
 
