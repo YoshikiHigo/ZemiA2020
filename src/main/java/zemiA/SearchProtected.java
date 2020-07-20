@@ -1,7 +1,6 @@
 package zemiA;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -9,7 +8,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 
 public class SearchProtected extends ASTVisitor {
 	int NprotM = 0;
-	List<String> ProtectedMethods = new ArrayList<String>();
+	ArrayList<ArrayList<String>> ProtectedMethods = new ArrayList<ArrayList<String>>();
 
 	@Override
 	public boolean visit(Modifier node) {
@@ -23,11 +22,15 @@ public class SearchProtected extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
+		ArrayList<String> name_parameter = new ArrayList<String>();
 		int modifiers = node.getModifiers();
-		//System.out.println(node.toString());
-		System.out.println("Modifiers = " + modifiers);
 		if (Modifier.isProtected(modifiers)) {
-			ProtectedMethods.add(node.getName().toString());
+			name_parameter.add(node.getName().toString());
+			for (Object s : node.parameters()) {
+				String[] type = s.toString().split(" ");
+				name_parameter.add(type[0]);
+			}
+			ProtectedMethods.add(name_parameter);
 		}
 		return super.visit(node);
 	}
@@ -36,7 +39,7 @@ public class SearchProtected extends ASTVisitor {
 		return NprotM;
 	}
 
-	public List<String> getProtectedMethods(){
+	public ArrayList<ArrayList<String>> getProtectedMethods() {
 		return ProtectedMethods;
 	}
 }

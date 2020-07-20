@@ -24,14 +24,10 @@ public class NumberofProtectedMembers extends ASTVisitor {
 			FileLoader fileloader = FileLoader.GetInstance();
 			List<String> lines;
 			superc = superClass.toString();
-			System.out.println(superc);
 			lines = fileloader.GetJavaFile(superc);
-			System.out.println(lines);
 			final ASTParser parser2 = ASTParser.newParser(AST.JLS14);
-			System.out.println(parser2);
 			if (lines != null) {
 				parser2.setSource(String.join(System.lineSeparator(), lines).toCharArray());
-
 				CompilationUnit unit = null;
 				try {
 					unit = (CompilationUnit) parser2.createAST(new NullProgressMonitor());
@@ -39,13 +35,11 @@ public class NumberofProtectedMembers extends ASTVisitor {
 					System.err.println(e.getMessage());
 					System.exit(0);
 				}
-
 				final SearchProtected Protected = new SearchProtected();
 				unit.accept(Protected);
 				NprotM = Protected.getNprotM();
 			}
 		}
-		System.out.println(NprotM);
 		return super.visit(node);
 	}
 
