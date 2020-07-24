@@ -22,21 +22,46 @@ class Metrics{
 public class ZemiAMain {
 
 	public static void main(final String[] args) {
-//		if (args[1] == null){
-//			System.out.println("please write folder path");
-//			System.exit(0);
-//		}
+		boolean exit_flag = false;
 
 		Metrics metrics = new Metrics();
 
 		FileLoader fileloader = FileLoader.GetInstance();
-
-		if(!fileloader.Init("src/main/java/zemiA")){
-			System.out.println("please write folder path");
-			System.exit(0);
+		for (String arg : args){
+			if(!fileloader.Init(arg)){
+				System.out.println("please write folder path");
+			} else {
+				exit_flag = true;
+				break;
+			}
 		}
 
+		if (!exit_flag) System.exit(0);
+
 		List<String> classNames = fileloader.GetAllClassNames();
+
+		NumberOfMethod nom_make = new NumberOfMethod();
+		nom_make.makeMethodTable();
+
+		for (String className : classNames){
+			List<String> lines = null;
+			lines = fileloader.GetJavaFile(className);
+
+			final ASTParser parser = ASTParser.newParser(AST.JLS14);
+			parser.setSource(String.join(System.lineSeparator(), lines).toCharArray());
+
+			CompilationUnit unit = null;
+			try {
+				unit = (CompilationUnit) parser.createAST(new NullProgressMonitor());
+			} catch (final Exception e) {
+				System.err.println(e.getMessage());
+				return;
+			}
+
+			final NumberOfMethod nom = new NumberOfMethod();
+			nom.getMethodList(className);
+			unit.accept(nom);
+		}
 
 		for (String className : classNames){
 			List<String> lines = null;
@@ -65,14 +90,25 @@ public class ZemiAMain {
 			final NumberOfMethod nom = new NumberOfMethod();
 			unit.accept(nom);
 
+			final BaseClassUsageRatio bur = new BaseClassUsageRatio();
+			unit.accept(bur);
+
+			final BaseClassOverridingRatio bovr = new BaseClassOverridingRatio();
+
+			unit.accept(bovr);
+
 			metrics.WMC = wmc.getWMC();
 			metrics.AMW = amw.getAMW();
 			metrics.NProtM = nprotm.getNprotM();
-			metrics.NOM = nom.getNOM();
+			metrics.BUR = bur.getBUR(metrics.NProtM);
+			metrics.BOvR = bovr.getBOvR(className);
+			metrics.NOM = NumberOfMethod.getNOM(className);
 
 			System.out.println(className + " of WMC = " + metrics.WMC);
 			System.out.println(className + " of AMW = " + metrics.AMW);
-			System.out.println(className + " of NProtM = " + metrics.NProtM);
+			System.out.println(className + " of NprotM = " + metrics.NProtM);
+			System.out.println(className + " of BUR = " + metrics.BUR);
+			System.out.println(className + " of BOvR = " + metrics.BOvR);
 			System.out.println(className + " of NOM = " + metrics.NOM);
 		}
 	}
