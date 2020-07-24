@@ -35,9 +35,7 @@ public class BaseClassOverridingRatio extends ASTVisitor {
 
 		superclassMethodList = NumberOfMethod.getMethodList(superclassName);
 		parentNOM = NumberOfMethod.getNOM(superclassName);
-
-		System.out.println( className.toString()+ ": superclassMethodList == null");
-
+		
 		return super.visit(node);
 	}
 
