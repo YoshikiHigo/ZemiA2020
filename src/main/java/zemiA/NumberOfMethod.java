@@ -27,7 +27,6 @@ public class NumberOfMethod extends ASTVisitor {
 
 		return super.visit(node);
 	}
-
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		// TODO auto-generated method stub
