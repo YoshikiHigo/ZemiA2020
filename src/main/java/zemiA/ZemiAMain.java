@@ -28,6 +28,7 @@ public class ZemiAMain {
 //		}
 
 		Metrics metrics = new Metrics();
+
 		FileLoader fileloader = FileLoader.GetInstance();
 
 		if(!fileloader.Init("src/main/java/zemiA")){

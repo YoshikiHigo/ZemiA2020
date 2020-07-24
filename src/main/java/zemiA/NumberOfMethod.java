@@ -13,9 +13,7 @@ public class NumberOfMethod extends ASTVisitor {
 		NOM++;
 		super.endVisit(node);
 	}
-
-	public int getNOM(){
+	public int getNOM() {
 		return NOM;
 	}
-
 }
