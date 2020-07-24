@@ -1,42 +1,48 @@
 package zemiA;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-
-import FileLoader.FileLoader;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import FileLoader.FileLoader;
+
+class Metrics{
+	int NProtM;
+	double BUR;
+	double BOvR;
+	double AMW;
+	int WMC;
+	int NOM;
+}
 
 public class ZemiAMain {
 
 	public static void main(final String[] args) {
+//		if (args[1] == null){
+//			System.out.println("please write folder path");
+//			System.exit(0);
+//		}
 
-		System.out.println("Started");
+		Metrics metrics = new Metrics();
 
-		final FileLoader fileLoader = FileLoader.GetInstance();
-		fileLoader.Init("C:\\Users\\user\\ZemiATest2020\\src\\main\\java");
-		List<String> classNames = fileLoader.GetAllClassNames();
-		System.out.println("classes: " + classNames);
+		FileLoader fileloader = FileLoader.GetInstance();
 
-		final ASTParser parser = ASTParser.newParser(AST.JLS14);
-
-		if (true) {
-			System.out.println("ABC");
+		if(!fileloader.Init("src/main/java/zemiA")){
+			System.out.println("please write folder path");
+			System.exit(0);
 		}
 
-		final ZemiAVisitor visitor = new ZemiAVisitor();
-		final NumberOfMethod NOM = new NumberOfMethod();
-		NOM.makeMethodTable();
-		final BaseClassOverridingRatio BOvR = new BaseClassOverridingRatio();
+		List<String> classNames = fileloader.GetAllClassNames();
 
-		for (String className: classNames) {
+		for (String className : classNames){
+			List<String> lines = null;
+			lines = fileloader.GetJavaFile(className);
 
-			List<String> lines = fileLoader.GetJavaFile(className);
+			final ASTParser parser = ASTParser.newParser(AST.JLS14);
 			parser.setSource(String.join(System.lineSeparator(), lines).toCharArray());
 
 			CompilationUnit unit = null;
@@ -47,32 +53,27 @@ public class ZemiAMain {
 				return;
 			}
 
-			unit.accept(visitor);
-			unit.accept(NOM);
-		}
+			final WeightedMethodCount wmc = new WeightedMethodCount();
+			unit.accept(wmc);
 
-		for (String className: classNames) {
-			System.out.println(className + ":"+ NumberOfMethod.getMethodList(className));
-		}
+			final AverageMethodWeight amw = new AverageMethodWeight();
+			unit.accept(amw);
 
-		for (String className: classNames) {
+			final NumberofProtectedMembers nprotm = new NumberofProtectedMembers();
+			unit.accept(nprotm);
 
-			List<String> lines = fileLoader.GetJavaFile(className);
-			parser.setSource(String.join(System.lineSeparator(), lines).toCharArray());
+			final NumberOfMethod nom = new NumberOfMethod();
+			unit.accept(nom);
 
-			CompilationUnit unit = null;
-			try {
-				unit = (CompilationUnit) parser.createAST(new NullProgressMonitor());
-			} catch (final Exception e) {
-				System.err.println(e.getMessage());
-				return;
-			}
+			metrics.WMC = wmc.getWMC();
+			metrics.AMW = amw.getAMW();
+			metrics.NProtM = nprotm.getNprotM();
+			metrics.NOM = nom.getNOM();
 
-			unit.accept(BOvR);
-		}
-
-		for (String className: classNames) {
-			System.out.println(className + ":BOvR = " + BOvR.getBOvR(className));
+			System.out.println(className + " of WMC = " + metrics.WMC);
+			System.out.println(className + " of AMW = " + metrics.AMW);
+			System.out.println(className + " of NProtM = " + metrics.NProtM);
+			System.out.println(className + " of NOM = " + metrics.NOM);
 		}
 	}
 }
