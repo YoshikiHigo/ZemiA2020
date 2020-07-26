@@ -106,15 +106,9 @@ public class ZemiAMain {
 			metrics.BOvR = bovr.getBOvR(className);
 			metrics.NOM = NumberOfMethod.getNOM(className);
 
-//			System.out.println(className + " of WMC = " + metrics.WMC);
-//			System.out.println(className + " of AMW = " + metrics.AMW);
-//			System.out.println(className + " of NprotM = " + metrics.NProtM);
-//			System.out.println(className + " of BUR = " + metrics.BUR);
-//			System.out.println(className + " of BOvR = " + metrics.BOvR);
-//			System.out.println(className + " of NOM = " + metrics.NOM);
-
 			if (DetectRefusedParentBequest(metrics)){
-				System.out.println( className + " Refused Parent Bequest");
+				detection_flag = true;
+				DetectionPrint(metrics,className);
 			}
 		}
 
@@ -123,5 +117,40 @@ public class ZemiAMain {
 
 	private static boolean DetectRefusedParentBequest(Metrics metrics){
 		return ((metrics.NProtM > 4 && metrics.BUR < 0.33) || metrics.BOvR < 0.33) && ((metrics.AMW > 2 || metrics.WMC > 14) || metrics.NOM > 7);
+	}
+
+	private static void DetectionPrint(Metrics metrics, String className){
+		System.out.println("---------------");
+		System.out.println(className + " Refused Parent Bequest");
+		if (metrics.NProtM > 4){
+			System.out.println("!!! " + className + " of NProtM = " + metrics.NProtM + " ( > 4)");
+		} else {
+			System.out.println(className + " of NProtM = " + metrics.NProtM);
+		}
+		if (metrics.BUR < 0.33){
+			System.out.println("!!! " + className + " of BUR = " + metrics.BUR + " ( < 0.33)");
+		} else {
+			System.out.println(className + " of BUR = " + metrics.BUR);
+		}
+		if (metrics.BOvR < 0.33){
+			System.out.println("!!! " + className + " of BOvR = " + metrics.BOvR + " ( < 0.33)");
+		} else {
+			System.out.println(className + " of BOvR = " + metrics.BOvR);
+		}
+		if (metrics.AMW > 2){
+			System.out.println("!!! " + className + " of AMW = " + metrics.AMW + " ( > 2)");
+		} else {
+			System.out.println(className + " of AMW = " + metrics.AMW);
+		}
+		if (metrics.WMC > 14){
+			System.out.println("!!! " + className + " of WMC = " + metrics.WMC + " ( > 14)");
+		} else {
+			System.out.println(className + " of WMC = " + metrics.WMC);
+		}
+		if (metrics.NOM > 7){
+			System.out.println("!!! " + className + " of NOM = " + metrics.NOM + " ( > 7)");
+		} else {
+			System.out.println(className + " of NOM = " + metrics.NOM);
+		}
 	}
 }
