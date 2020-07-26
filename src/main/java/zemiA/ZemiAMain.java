@@ -23,20 +23,22 @@ public class ZemiAMain {
 
 	public static void main(final String[] args) {
 		boolean exit_flag = false;
+		boolean detection_flag = false;
 
 		Metrics metrics = new Metrics();
 
 		FileLoader fileloader = FileLoader.GetInstance();
 		for (String arg : args){
-			if(!fileloader.Init(arg)){
-				System.out.println("please write folder path");
-			} else {
+			if(fileloader.Init(arg)){
 				exit_flag = true;
 				break;
 			}
 		}
 
-		if (!exit_flag) System.exit(0);
+		if (!exit_flag){
+			System.out.println("please write folder path");
+			System.exit(0);
+		}
 
 		List<String> classNames = fileloader.GetAllClassNames();
 
@@ -104,12 +106,22 @@ public class ZemiAMain {
 			metrics.BOvR = bovr.getBOvR(className);
 			metrics.NOM = NumberOfMethod.getNOM(className);
 
-			System.out.println(className + " of WMC = " + metrics.WMC);
-			System.out.println(className + " of AMW = " + metrics.AMW);
-			System.out.println(className + " of NprotM = " + metrics.NProtM);
-			System.out.println(className + " of BUR = " + metrics.BUR);
-			System.out.println(className + " of BOvR = " + metrics.BOvR);
-			System.out.println(className + " of NOM = " + metrics.NOM);
+//			System.out.println(className + " of WMC = " + metrics.WMC);
+//			System.out.println(className + " of AMW = " + metrics.AMW);
+//			System.out.println(className + " of NprotM = " + metrics.NProtM);
+//			System.out.println(className + " of BUR = " + metrics.BUR);
+//			System.out.println(className + " of BOvR = " + metrics.BOvR);
+//			System.out.println(className + " of NOM = " + metrics.NOM);
+
+			if (DetectionRefusedParentBequest(metrics)){
+				System.out.println( className + " Refused Parent Bequest");
+			}
 		}
+
+		if (!detection_flag) System.out.println("There is no class which Refused Parent Bequest");
+	}
+
+	private static boolean DetectionRefusedParentBequest(Metrics metrics){
+		return ((metrics.NProtM > 4 && metrics.BUR < 0.33) || metrics.BOvR < 0.33) && ((metrics.AMW > 2 || metrics.WMC > 14) || metrics.NOM > 7);
 	}
 }
