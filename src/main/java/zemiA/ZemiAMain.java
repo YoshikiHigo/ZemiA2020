@@ -113,7 +113,7 @@ public class ZemiAMain {
 //			System.out.println(className + " of BOvR = " + metrics.BOvR);
 //			System.out.println(className + " of NOM = " + metrics.NOM);
 
-			if (DetectionRefusedParentBequest(metrics)){
+			if (DetectRefusedParentBequest(metrics)){
 				System.out.println( className + " Refused Parent Bequest");
 			}
 		}
@@ -121,7 +121,7 @@ public class ZemiAMain {
 		if (!detection_flag) System.out.println("There is no class which Refused Parent Bequest");
 	}
 
-	private static boolean DetectionRefusedParentBequest(Metrics metrics){
+	private static boolean DetectRefusedParentBequest(Metrics metrics){
 		return ((metrics.NProtM > 4 && metrics.BUR < 0.33) || metrics.BOvR < 0.33) && ((metrics.AMW > 2 || metrics.WMC > 14) || metrics.NOM > 7);
 	}
 }
