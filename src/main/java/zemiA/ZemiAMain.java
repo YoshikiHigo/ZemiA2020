@@ -116,7 +116,7 @@ public class ZemiAMain {
 	}
 
 	private static boolean DetectRefusedParentBequest(Metrics metrics){
-		return ((metrics.NProtM > 4 && metrics.BUR < 0.33) || metrics.BOvR < 0.33) && ((metrics.AMW > 2 || metrics.WMC > 14) || metrics.NOM > 7);
+		return ((metrics.NProtM > 4 && metrics.BUR < 0.33) || metrics.BOvR < 0.33) && ((metrics.AMW > 2 || metrics.WMC > 14) && metrics.NOM > 7);
 	}
 
 	private static void DetectionPrint(Metrics metrics, String className){
