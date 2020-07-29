@@ -58,7 +58,6 @@ public class FileLoader {
 				if (f.isDirectory()) {
 					dirs.add(f);
 				} else if (f.getName().matches((pattern))) {
-					System.out.println(f.getName());
 					String className = f.getName().split("\\.")[0];
 					retVal.add(className);
 					classPathTable.put(className, f.getAbsolutePath());
