@@ -8,8 +8,7 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import FileLoader.FileLoader;
@@ -23,28 +22,12 @@ public class BaseClassUsageRatio extends ASTVisitor {
 	org.eclipse.jdt.core.dom.Type superClass;
 
 	@Override
-	public boolean visit(MethodDeclaration node) {
-		int modifiers = node.getModifiers();
-		if (Modifier.isProtected(modifiers)) {
-			for (ArrayList<String> s : ProtectedMethods) {
-				if (s.get(0).equals(node.getName().toString())) {
-					int i = 1;
-					for (Object s1 : node.parameters()) {
-						if (i < s.size()) {
-							String[] type = s1.toString().split(" ");
-							if (type[0].equals(s.get(i))) {
-								i++;
-							} else {
-								break;
-							}
-						} else {
-							break;
-						}
-					}
-					if (i == s.size() && i == node.parameters().size() + 1) {
-						UsedProtected++;
-					}
-				}
+	public boolean visit(MethodInvocation node) {
+		System.out.println("Debug");
+		System.out.println(node.getName());
+		for (ArrayList<String> s : ProtectedMethods) {
+			if (s.get(0).equals(node.getName().toString())) {
+				UsedProtected++;
 			}
 		}
 		return super.visit(node);
@@ -80,4 +63,5 @@ public class BaseClassUsageRatio extends ASTVisitor {
 	public double getBUR(int NprotM) {
 		return (double) UsedProtected / NprotM;
 	}
+
 }
