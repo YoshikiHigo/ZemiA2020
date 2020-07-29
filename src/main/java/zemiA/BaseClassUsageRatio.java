@@ -23,8 +23,6 @@ public class BaseClassUsageRatio extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodInvocation node) {
-		System.out.println("Debug");
-		System.out.println(node.getName());
 		for (ArrayList<String> s : ProtectedMethods) {
 			if (s.get(0).equals(node.getName().toString())) {
 				UsedProtected++;
